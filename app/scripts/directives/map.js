@@ -11,6 +11,10 @@ angular.module('gemeenteFinancienApp')
 				element.text('this is the map directive');
 
 
+				/*
+				- fusie gemeentes mergen
+				*/
+
 
 				/*
 				----------------------------------------------------------------------------------------

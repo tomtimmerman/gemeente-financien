@@ -21,9 +21,18 @@
 
   <!-- dataset select -->
   <div class="col-xs-12">
-    <select class="form-control">
-      <option>1ste</option>
-      <option>2de</option>
+    <select ng-model="selectedDataset" class="form-control">
+      <option value="totaal">Totale uitgaven</option>
+      <option value="bestuur">Algemeen Bestuur</option>
+      <option value="veiligheid">Openbare orde en Veiligheid</option>
+      <option value="verkeer">Verkeer, Vervoer en Waterstaat</option>
+      <option value="economisch">Economische zaken</option>
+      <option value="onderwijs">Onderwijs</option>
+      <option value="cultuur">Cultuur en Recreatie</option>
+      <option value="sociaal">Sociale zekerheid</option>
+      <option value="gezondheid">Volksgezondheid en Milieu</option>
+      <option value="huisvesting">Ruimtelijke ordening en Volkshuisvesting</option>
+      <option value="overig">Overig</option>
     </select>
   </div>
 
@@ -36,12 +45,12 @@
 
   <!-- map -->
   <div class="col-sm-8">
-    map
+    <map></map>
   </div>
 
   <!-- list -->
   <div class="col-sm-4">
-    list
+    <list data="getMapData()" selected="selectedMunicipalities"></list>
   </div>
 
 </div>
@@ -51,9 +60,11 @@
 <!-- MUNICIPALITY DETAILS -->
 <div class="row">
 
-  <div class="col-md-6">A</div>
-  <div class="col-md-6">B</div>
-  <div class="col-md-6">C</div>
+  <div class="col-md-6" ng-repeat="municipality in selectedMunicipalities">
+    <municipality-details data="getMunicipalityDetailsData(municipality)" municipalityId="municipality"></municipality-details>
+  </div>
+  
+
 
 </div>
 
