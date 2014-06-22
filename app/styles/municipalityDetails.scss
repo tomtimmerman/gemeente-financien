@@ -1,0 +1,97 @@
+
+
+.details {
+
+
+	margin-top: 20px;
+
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		margin: 0;
+		padding: 5px;
+	}
+
+
+}
+
+
+
+
+
+/* chart */
+text {
+	fill: #000;
+}
+
+.axis-label {
+  text-anchor: middle;
+  fill: #000000;
+  stroke: none;
+  font-size: 13px;
+}
+
+.slope {
+  fill-opacity: 0.7;
+}
+
+
+/* chart categories */
+.bestuur {
+  stroke: none;
+  fill: #d6792a;
+}
+
+.veiligheid {
+  stroke: none;
+  fill: #B99BC7;
+}
+
+.verkeer {
+  stroke: none;
+  fill: #7bb5b0;
+}
+
+.economisch {
+  stroke: none;
+  fill: #b4a589;
+}
+
+.onderwijs {
+  stroke: none;
+  fill: #e28e84;
+}
+
+.cultuur {
+  stroke: none;
+  fill: #e8b937;
+}
+
+.sociaal {
+  stroke: none;
+  fill: #214259;
+}
+
+.gezondheid {
+  stroke: none;
+  fill: #459ad4;
+}
+
+.huisvesting {
+  stroke: none;
+  fill: #1c6e6a;
+}
+
+.overig {
+  stroke: none;
+  fill: #c93126;
+}
+
+
+
+

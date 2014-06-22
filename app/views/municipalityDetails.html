@@ -1,5 +1,13 @@
 
 
-<h4>{{dataset.name}}</h4>
-<p>{{dataset.data}}</p>
+<div id="details{{dataset.name}}">
+	<h4>{{dataset.name}}</h4>
 
+	<ul>
+		<li class="pull-left">Coalitie:</li>
+		<li class="pull-left" ng-repeat="party in dataset.coalition">{{convert.partyName(party)}}</li>
+		<li class="text-warning" ng-if="dataset.coalition.length === 0">Niet bekend</li>
+		<li class="clearfix"></li>
+	</ul>
+
+</div>

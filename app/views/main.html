@@ -7,15 +7,15 @@
   <!-- coalition filter -->
   <div class="col-xs-12">
     <div class="btn-group">
-      <button type="button" class="btn btn-default">SP</button>
-      <button type="button" class="btn btn-default">GroenLinks</button>
-      <button type="button" class="btn btn-default">PvdA</button>
-      <button type="button" class="btn btn-default">D66</button>
-      <button type="button" class="btn btn-default">Lokale partijen</button>
-      <button type="button" class="btn btn-default">ChristenUnie</button>
-      <button type="button" class="btn btn-default">CDA</button>
-      <button type="button" class="btn btn-default">TON</button>
-      <button type="button" class="btn btn-default">VVD</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('sp')!== -1}" value="sp" ng-click="setFilter('sp')">SP</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('gl')!== -1}" value="gl" ng-click="setFilter('gl')">GroenLinks</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('pvda')!== -1}" value="pvda" ng-click="setFilter('pvda')">PvdA</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('d66')!== -1}" value="d66" ng-click="setFilter('d66')">D66</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('lokaal')!== -1}" value="lokaal" ng-click="setFilter('lokaal')">Lokale partijen</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('cu')!== -1}" value="cu" ng-click="setFilter('cu')">ChristenUnie</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('cda')!== -1}" value="cda" ng-click="setFilter('cda')">CDA</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('ton')!== -1}" value="ton" ng-click="setFilter('ton')">TON</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('vvd')!== -1}" value="vvd" ng-click="setFilter('vvd')">VVD</button>
     </div>    
   </div>
 
@@ -44,13 +44,13 @@
 <div class="row">
 
   <!-- map -->
-  <div class="col-sm-8">
+  <div class="col-sm-8 map">
     <map></map>
   </div>
 
   <!-- list -->
-  <div class="col-sm-4">
-    <list data="getMapData()" selected="selectedMunicipalities"></list>
+  <div class="col-sm-4 list">
+    <list data="mapData" selected="selectedMunicipalities" filters="filters"></list>
   </div>
 
 </div>
@@ -60,7 +60,7 @@
 <!-- MUNICIPALITY DETAILS -->
 <div class="row">
 
-  <div class="col-md-6" ng-repeat="municipality in selectedMunicipalities">
+  <div class="col-md-6 details" ng-repeat="municipality in selectedMunicipalities">
     <municipality-details data="getMunicipalityDetailsData(municipality)" municipalityId="municipality"></municipality-details>
   </div>
   

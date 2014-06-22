@@ -1,8 +1,27 @@
 
+<input class="form-control" ng-model="search.$" placeholder="Zoek een gemeente">
+
+<p>
+  <span ng-if="filters.length > 0">Coalitie gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(filteredAverage)}}</span></span>&nbsp;
+</p>
+
+<p>
+  Nationaal gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(average)}}</span>
+</p>
+
 <ul class="">
-  <li class="" ng-repeat="municipality in dataset">
+
+<!--
+  <li class="header"><span ng-if="filters.length > 0">Coalitie gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(filteredAverage)}}</span></span>&nbsp;</li>
+  <li class="header">Nationaal gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(average)}}</span></li>
+-->
+  
+
+  <li class="" ng-repeat="municipality in dataset | filter:search" ng-class="{selected: municipality.selected==true}" ng-click="setSelected(municipality.id)">
     {{municipality.rank}}
     {{municipality.name}}
-    {{municipality.value}}
+    <span class="badge pull-right">€ {{convert.formatNumber(municipality.value)}}</span>
   </li>
+
+  <li class="text-warning" ng-if="dataset.length === 0">Geen gemeenten die aan deze voorwaarden voldoen!</li>
 </ul>
