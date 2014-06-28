@@ -7,8 +7,30 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
 
 
 
+
+
+$color-none: #fafafa;
+$color-sub1: #edf8fb;
+$color-sub2: #ccece6;
+$color-sub3: #99d8c9;
+$color-sub4: #66c2a4;
+$color-sub5: #2ca25f;
+$color-sub6: #006d2c;
+
+
+
+
 @import 'municipalityDetails.scss';
 @import 'list.scss';
+@import 'map.scss';
+
+
+
+
+
+
+
+
 
 
 

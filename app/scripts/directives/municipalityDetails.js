@@ -39,6 +39,61 @@ angular.module('gemeenteFinancienApp')
 				};
 
 
+
+
+
+
+
+
+				//
+				var drawTooltip = function(data, position, column) {
+//console.log(position);
+//var el = svg.select('#'+id);
+//console.log(el);
+
+					var tooltip = svg.append('g')
+						.attr('class', 'graph-tooltip')
+			      .attr('transform', function() { 
+			      	var x = position[0],
+			      			y = position[1];
+			      	if (x > 0) {
+			      		x -= segmentWidth;
+			      	} else {
+			      		x += segmentWidth;
+			      	};
+			        return 'translate(' + x + ',' + y + ')'; 
+			      });
+
+					tooltip.append('rect')
+						.attr('class', 'tooltip-bg')
+						.attr('width', segmentWidth)
+						.attr('height', 50)
+
+					var t = tooltip.append('text')
+						.attr('class', 'tooltip-text')
+				    .attr('x', 5)
+				    .attr('y', 9)
+				    .attr('dy', '.35em');
+				    //.text(function() { 
+				    	//return data.name;
+				    //});
+
+					t.append('tspan').text(Convert.subjectName(data.name))
+						.attr('x', 3)
+						.attr('dy', 3);
+
+					var percentage = Math.round(data.data[column]/(totalValues[column]/100)); // calculate percentage of max value
+					t.append('tspan').text('€ ' + data.data[column] + ' per inwoner (' + percentage + '%)')
+						.attr('x', 3)
+						.attr('dy', 15);
+
+				}
+
+
+
+
+
+
 				// draws the chart
 				var drawChart = function() {
 					// clear chart
@@ -46,6 +101,7 @@ angular.module('gemeenteFinancienApp')
 
 					// DRAW DATA COLUMNS
 					for (var i = 0; i < scope.dataset.data[0].data.length; i++) {
+						var segmentHeight = 0;
 
 						// set start X and Y positions
 						var startY = height - margin.bottom; // start Y position of the segments
@@ -68,18 +124,30 @@ angular.module('gemeenteFinancienApp')
 					  var segment = column.selectAll('g')
 					      .data(timeSeries)
 					    .enter().append('g')
+					      .attr('id', function(d) {
+					        return d.id + '-' + i;
+					      })
 					      .attr('class', function(d) {
 					        return d.class;
 					      })
+					      .on('mouseover', function(d) {
+					      	var column = this.id.split('-')[1];
+					      	var position = d3.transform(d3.select(this).attr('transform')).translate; // get position of the group where the mouse passes over
+					      	drawTooltip(d, position, column); // draw tooltip
+								})
+					      .on('mouseout', function(d) {
+									svg.select('.graph-tooltip').remove(); // remove tooltip
+								})
 					      .attr('transform', function(d) { 
 					        var x = startX; // set y value of segment
 					        var percentage = d.data[i]/(maxValue/100); // calculate percentage of max value
-					        var segmentHeight = (height - margin.top - margin.bottom)/100*percentage; // calculate the height of the segment
+					        segmentHeight = (height - margin.top - margin.bottom)/100*percentage; // calculate the height of the segment
 					        var y = startY - segmentHeight; // set y value of segment
 					        startY -= segmentHeight; // set start y position for next segment
 
 					        return 'translate(' + x + ',' + y + ')'; 
 					      });
+
 
 						// draw segment background
 						segment.append('rect')
@@ -95,13 +163,20 @@ angular.module('gemeenteFinancienApp')
 					    .attr('y', 6)
 					    .attr('dy', '.35em')
 					    .text(function(d) { 
-					      var percentage = d.data[i]/(totalValues[i]/100); // calculate percentage of max value
-					      return d.name + ' (' + Math.round(percentage) + '%)'; 
+								if ( ((height - margin.top - margin.bottom)/100*(d.data[i]/(maxValue/100))) > 11 ) { // don't show label if it doesn't fit
+						      var percentage = d.data[i]/(totalValues[i]/100); // calculate percentage of max value
+						      return Convert.subjectName(d.name) + ' (' + Math.round(percentage) + '%)'; 
+								} else {
+									return '';
+								};
 					    });
 
 					}
 
 					// DRAW SLOPES
+					var slopes = svg.append('g') // slopes group
+						.attr('id', 'slopes');
+
 					for (var i = 0; i < scope.dataset.data[0].data.length-1; i++) {
 						for (var j = 0; j < timeSeries.length; j++) {
 					    // get position(x,y) and dimentions(height, width) of the segments where the slope is draw in between
@@ -127,7 +202,7 @@ angular.module('gemeenteFinancienApp')
 					    cornerPoints.y4 = positionSegmentColumn2[1];
 
 					    // add new column group
-					    var slopeColumn = svg.append('g'); 
+					    var slopeColumn = slopes.append('g'); 
 
 					    // set slope path
 					    var path = 'M ' + cornerPoints.x1 + ' ' + cornerPoints.y1 + ' L ' + cornerPoints.x2 + ' ' + cornerPoints.y2 + ' L ' + cornerPoints.x3 + ' ' + cornerPoints.y3 + ' L ' + cornerPoints.x4 + ' ' + cornerPoints.y4 + ' Z';
@@ -141,8 +216,8 @@ angular.module('gemeenteFinancienApp')
 					}
 
 					// DRAW COLUMN LABELS
-					var bottomLabels = svg.append('g'); // x axis labels
-					var topLabels = svg.append('g'); // x axis labels
+					var headerLabels = svg.append('g') //
+						.attr('id', 'header-labels');
 
 					for (var i = 0; i < scope.dataset.data[0].data.length; i++) {
 					  var x = 0 + margin.left + (segmentWidth/2); // start X position of the 1st column
@@ -150,20 +225,20 @@ angular.module('gemeenteFinancienApp')
 					    x += (segmentWidth + (segmentWidth / 2)) * i;
 					  };
 					  
-					  // draw bottom axis labels
-					  bottomLabels.append('text')
+					  // draw period labels
+					  headerLabels.append('text')
 					    .attr('x', x)
-					    .attr('y', height)
-					    .attr('class', 'axis-label')
+					    .attr('y', 0 + 12)
+					    .attr('class', 'axis-label-period')
 					    .text(function(d) { 
 					      return columnBottomLabels[i]; 
 					    });
 
-					  // draw top total labels
-					  topLabels.append('text')
+					  // draw total labels
+					  headerLabels.append('text')
 					    .attr('x', x)
-					    .attr('y', 0 + 10)
-					    .attr('class', 'axis-label')
+					    .attr('y', 0 + 27)
+					    .attr('class', 'axis-label-total')
 					    .text(function(d) { 
 					      return '€ ' + Convert.formatNumber(totalValues[i]) + ' per inwoner'; 
 					    });
@@ -188,7 +263,7 @@ angular.module('gemeenteFinancienApp')
 				var width = 0; // width of the chart
 				var height = 0; // height of the chart
 				var segmentWidth = 0; // width of the segments in the chart
-				var margin = {'top': 15, 'right': 0, 'bottom': 15, 'left': 0}; // margin of the chart
+				var margin = {'top': 35, 'right': 0, 'bottom': 0, 'left': 0}; // margin of the chart
 				var maxValue = 0; // maximum value in dataset, length of the y axis
 				var totalValues = []; // array containing total values of the columns
 				var columnBottomLabels = ['2010', '2013'];

@@ -17,10 +17,14 @@
 -->
   
 
-  <li class="" ng-repeat="municipality in dataset | filter:search" ng-class="{selected: municipality.selected==true}" ng-click="setSelected(municipality.id)">
-    {{municipality.rank}}
-    {{municipality.name}}
+  <li class="{{getClass(municipality.value)}}" ng-repeat="municipality in dataset | filter:search" ng-class="{selected: municipality.selected==true}" ng-click="setSelected(municipality.id)">
+    <span class="pull-left rank">{{municipality.rank}}</span>
+    <span class="pull-left">{{municipality.name}}<br/>
+      <span class="party" ng-repeat="party in municipality.coalition">{{convert.partyName(party)}}</span>
+      <span class="party" ng-if="municipality.coalition.length === 0">Coalitie niet bekend</span>
+    </span>
     <span class="badge pull-right">€ {{convert.formatNumber(municipality.value)}}</span>
+    <span class="clearfix"></span>
   </li>
 
   <li class="text-warning" ng-if="dataset.length === 0">Geen gemeenten die aan deze voorwaarden voldoen!</li>

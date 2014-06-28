@@ -27,18 +27,60 @@
 /* chart */
 text {
 	fill: #000;
+  font-size: 11px;
 }
 
-.axis-label {
+.axis-label-period {
   text-anchor: middle;
   fill: #000000;
   stroke: none;
-  font-size: 13px;
+  font-size: 14px;
+}
+
+.axis-label-total {
+  text-anchor: middle;
+  fill: #000000;
+  stroke: none;
+  font-size: 12px;
 }
 
 .slope {
   fill-opacity: 0.7;
 }
+
+
+/*
+.tooltip-bg {
+  fill: #a1a1a1;
+  fill-opacity: 0.5;
+  stroke: none;
+}
+
+.tooltip-text {
+  fill: #000;
+  stroke: none;
+  text-anchor: start;
+  font-size: 12px;
+}
+*/
+
+.graph-tooltip {
+
+  rect {
+    fill: #a1a1a1;
+    stroke: none;
+    fill-opacity: 0.5;
+  }
+
+  text {
+    text-anchor: start;
+    fill: #000;
+    stroke: none;
+    font-size: 12px;
+  }
+
+}
+
 
 
 /* chart categories */

@@ -9,7 +9,8 @@ angular.module('gemeenteFinancienApp')
       scope: {
         data: '=data',
         selectedMunicipalities: '=selected',
-        filters: '=filters'
+        filters: '=filters',
+        legend: '=legend'
       },
       link: function postLink(scope, element, attrs) {
       	
@@ -47,6 +48,25 @@ angular.module('gemeenteFinancienApp')
 						total += scope.dataset[i].value;
 					};
 					return Math.round(total/(i+1));
+				}
+
+
+				// returns the class for the municipality path
+				scope.getClass = function(value) {
+//console.log(scope.legend);
+					var returnClass = 'none';
+					for (var i = 0; i < scope.legend.categories.length; i++) {
+						if (returnClass === 'none' && value !== null && scope.legend.categories[i].max > value && scope.legend.categories[i].min === null && scope.legend.categories[i].max !== null) {
+							returnClass = scope.legend.categories[i].class;
+						} else if(returnClass === 'none' && value !== null && scope.legend.categories[i].max > value && scope.legend.categories[i].min <= value && scope.legend.categories[i].max !== null && scope.legend.categories[i].min !== null) {
+							returnClass = scope.legend.categories[i].class;
+						} else if(returnClass === 'none' && value !== null && scope.legend.categories[i].max === null && scope.legend.categories[i].min <= value && scope.legend.categories[i].min !== null) {
+							returnClass = scope.legend.categories[i].class;
+						//} else if(returnClass === 'none' && scope.legend.categories[i].max === null && scope.legend.categories[i].min === null) {
+							//returnClass = scope.legend.categories[i].class;
+						};
+					};
+					return returnClass;
 				}
 
 
