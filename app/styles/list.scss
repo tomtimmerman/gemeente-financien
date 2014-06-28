@@ -23,7 +23,7 @@
 
   .selected {
       /*background-color: #f5f5f5 !important;*/
-      border-left-color: #a1a1a1;
+      border-left-color: $color-selected;
   }
 
   ul {
@@ -37,7 +37,7 @@
   li {
     @include list-item-margins;
     cursor: pointer;
-    border-left: 3px solid transparent;
+    border-left: 5px solid transparent;
   }
 
   .rank {
@@ -58,29 +58,6 @@
     margin-left: 0px; 
   }
 
-  .sub1 {
-    background-color: $color-sub1;
-  }
-
-  .sub2 {
-    background-color: $color-sub2;
-  }
-
-  .sub3 {
-    background-color: $color-sub3;
-  }
-
-  .sub4 {
-    background-color: $color-sub4;
-  }
-
-  .sub5 {
-    background-color: $color-sub5;
-  }
-
-  .sub6 {
-    background-color: $color-sub6;
-  }
 
 }
 

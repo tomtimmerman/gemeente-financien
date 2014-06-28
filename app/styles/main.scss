@@ -17,6 +17,8 @@ $color-sub4: #66c2a4;
 $color-sub5: #2ca25f;
 $color-sub6: #006d2c;
 
+$color-selected: #f11111;
+
 
 
 
@@ -29,6 +31,61 @@ $color-sub6: #006d2c;
 
 
 
+ul {
+  list-style: none;
+  margin: 15px 0 0 0;
+  padding: 0;
+  float: left;
+}
+
+
+.none {
+  background-color: $color-none;
+}
+
+.sub1 {
+  background-color: $color-sub1;
+}
+
+.sub2 {
+  background-color: $color-sub2;
+}
+
+.sub3 {
+  background-color: $color-sub3;
+}
+
+.sub4 {
+  background-color: $color-sub4;
+}
+
+.sub5 {
+  background-color: $color-sub5;
+}
+
+.sub6 {
+  background-color: $color-sub6;
+}
+
+
+
+.legend {
+
+  .color {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin: 0 3px 0 0;
+    padding: 0;
+  }
+
+  .caption {
+    padding: 0;
+    margin: 0 15px 0 0;
+    line-height: 1em;
+  }
+
+}
 
 
 

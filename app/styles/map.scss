@@ -16,6 +16,15 @@
     stroke-width: 0.3;
   }
 
+  .selected {
+    stroke: $color-selected !important;
+    stroke-width: 1 !important;
+  }
+
+  .hide-municipality {
+    fill-opacity: 0.1;
+  }
+
   .none {
     fill: $color-none;
   }

@@ -20,6 +20,20 @@ angular.module('gemeenteFinancienApp')
 	// setFilter(name)
 	
 
+	// returns the formatted caption of the legend category
+	$scope.formatLegendCaption = function(min, max) {
+		var returnValue = min + ' - ' + max;
+		if (min === null && max !== null) {
+			returnValue = '< ' + max;
+		};
+		if (min !== null && max === null) {
+			returnValue = '> ' + min;
+		};
+		if (min === null && max === null) {
+			returnValue = 'Niet bekend';
+		};
+		return returnValue;
+	}
 
 
 	// returns an array with data formatted for the map [{id, name, value2013}]
@@ -244,6 +258,7 @@ angular.module('gemeenteFinancienApp')
 	// load dataset, wait for promise to be fullfilled, DATA IS LOADED!!!!
 	Dataset.getMunicipalities().then(function(data) {
 	  $scope.municipalitiesDataset = data;
+console.log(data);
 	});
 
 

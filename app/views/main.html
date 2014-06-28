@@ -22,19 +22,51 @@
   <!-- dataset select -->
   <div class="col-xs-12">
     <select ng-model="selectedDataset" class="form-control">
-      <option value="totaal">Totale uitgaven</option>
-      <option value="bestuur">Algemeen Bestuur</option>
-      <option value="veiligheid">Openbare orde en Veiligheid</option>
-      <option value="verkeer">Verkeer, Vervoer en Waterstaat</option>
-      <option value="economisch">Economische zaken</option>
-      <option value="onderwijs">Onderwijs</option>
-      <option value="cultuur">Cultuur en Recreatie</option>
-      <option value="sociaal">Sociale zekerheid</option>
-      <option value="gezondheid">Volksgezondheid en Milieu</option>
-      <option value="huisvesting">Ruimtelijke ordening en Volkshuisvesting</option>
-      <option value="overig">Overig</option>
+      <option value="totaal">Totale uitgaven (2013)</option>
+      <option value="bestuur">Algemeen Bestuur (uitgaven 2013)</option>
+      <option value="veiligheid">Openbare orde en Veiligheid (uitgaven 2013)</option>
+      <option value="verkeer">Verkeer, Vervoer en Waterstaat (uitgaven 2013)</option>
+      <option value="economisch">Economische zaken (uitgaven 2013)</option>
+      <option value="onderwijs">Onderwijs (uitgaven 2013)</option>
+      <option value="cultuur">Cultuur en Recreatie (uitgaven 2013)</option>
+      <option value="sociaal">Sociale zekerheid (uitgaven 2013)</option>
+      <option value="gezondheid">Volksgezondheid en Milieu (uitgaven 2013)</option>
+      <option value="huisvesting">Ruimtelijke ordening en Volkshuisvesting (uitgaven 2013)</option>
+      <option value="overig">Overig (uitgaven 2013)</option>
+      <!--
+      <option value="_totaal">Totale uitgaven (2010 t.o.v. 2013)</option>
+      <option value="_bestuur">Algemeen Bestuur (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_veiligheid">Openbare orde en Veiligheid (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_verkeer">Verkeer, Vervoer en Waterstaat (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_economisch">Economische zaken (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_onderwijs">Onderwijs (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_cultuur">Cultuur en Recreatie (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_sociaal">Sociale zekerheid (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_gezondheid">Volksgezondheid en Milieu (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_huisvesting">Ruimtelijke ordening en Volkshuisvesting (uitgaven 2010 t.o.v. 2013)</option>
+      <option value="_overig">Overig (uitgaven 2010 t.o.v. 2013)</option>
+      -->
     </select>
   </div>
+
+
+  <!-- legend -->
+  <div class="col-xs-12">
+    <ul class="legend">
+      
+      <li class="pull-left" ng-repeat="item in legend.categories">
+        <span class="color {{item.class}}"></span>
+        <span class="caption">{{formatLegendCaption(item.min, item.max)}}</span>
+      </li>
+      <li class="pull-left">
+        <span class="color none"></span>
+        <span class="caption">Niet bekend</span>
+      </li>
+
+      <li class="clearfix"></li>
+    </ul>
+  </div>
+
 
 </div>
 
