@@ -11,6 +11,7 @@ angular.module('gemeenteFinancienApp')
         selectedMunicipalities: '=selected',
         filters: '=filters',
         //legend: '=legend'
+        type: '@type',
         getColorScale: '&colorScale'
       },
       link: function postLink(scope, element, attrs) {
@@ -81,6 +82,114 @@ angular.module('gemeenteFinancienApp')
 
 
 				//
+				var drawLegend = function() {
+					var legendWidth = 200;
+					var legendHeight = 15;
+					var legendBarHeight = 10;
+					var legendMargin = {'top': 0, 'right': 20, 'bottom': 0, 'left': 20}
+
+					if (legend !== null) { // check if legend is initialized
+
+						// get maximum value in the map dataset
+						var max = d3.max(scope.dataset, function(item) {
+						  return item.value;
+						});
+
+						// get minimum value in the map dataset
+						var min = d3.min(scope.dataset, function(item) {
+						  return (item.value !== 0 ) ? item.value : null;
+						});
+
+						// get the average 
+						var average = d3.mean(scope.dataset, function(item) {
+						  return item.value;
+						});
+
+						// clear legend,
+						legend.selectAll('g').remove();
+
+						// position legend
+				    legend.attr('transform', function() { 
+			      	//var x = width - legendWidth,
+			      	var x = (width / 2) - (legendWidth / 2),
+			      			y = height - legendHeight - 15;
+			        return 'translate(' + x + ',' + y + ')'; 
+			      });
+
+			      var l = legend.append('g');
+
+				    // set gradient
+						var gradient = l.append('linearGradient')
+							.attr('id', 'gradient')
+						  .attr('x1', 0)
+						  .attr('y1', 0)
+						  .attr('x2', legendWidth)
+						  .attr('y2', legendBarHeight)
+						  .attr('gradientUnits', 'userSpaceOnUse')
+
+						gradient
+						  .append('stop')
+						  .attr('offset', '0%')
+						  //.attr('stop-color', '#ff0')
+						  .attr('stop-color', color(min))
+						  .attr('stop-opacity', 1);
+
+						if (scope.type === 'relative') { // add extra stop if relative
+							gradient
+							  .append('stop')
+							  .attr('offset', '50%')
+							  .attr('stop-color', color(average))
+							  .attr('stop-opacity', 1);							
+						};
+						  
+						gradient
+						  .append('stop')
+						  .attr('offset', '100%')
+						  .attr('stop-color', color(max))
+						  .attr('stop-opacity', 1);
+
+						// add legend rect
+						l.append('rect')
+							.attr('x', legendMargin.left)
+							.attr('y', legendHeight - legendBarHeight)
+							.attr('width', legendWidth-legendMargin.left-legendMargin.right)
+							.attr('height', legendBarHeight-legendMargin.top-legendMargin.bottom)
+							.style('fill', 'url(#gradient)');
+
+						// add legend text
+						l.append('text')
+							.attr('x', legendMargin.left)
+							.attr('y', 0)
+							.attr('text-anchor', 'middle')
+							//.text(Convert.formatNumber(min));
+							.text(function() {
+								var value = Convert.formatNumber(min);
+								return (scope.type === 'absolute') ? '€ ' + value : value + '%';
+							});
+
+						if (scope.type === 'relative') { // add extra stop if relative
+							l.append('text')
+								.attr('x', (legendWidth-legendMargin.right-legendMargin.left)/2 + legendMargin.left)
+								.attr('y', 0)
+								.attr('text-anchor', 'middle')
+								.text(Math.round(average) + '%');							
+						}
+
+						l.append('text')
+							.attr('x', legendWidth-legendMargin.right)
+							.attr('y', 0)
+							.attr('text-anchor', 'middle')
+							//.text(Convert.formatNumber(max));
+							.text(function() {
+								var value = Convert.formatNumber(max);
+								return (scope.type === 'absolute') ? '€ ' + value : value + '%';
+							});
+					};
+
+				}
+
+
+				//
 				var drawTooltip = function(bbox, data) {
 					var tt = tooltip.append('g')
 						.attr('class', '.map-tooltip')
@@ -98,17 +207,22 @@ angular.module('gemeenteFinancienApp')
 				    .attr('y', 9)
 				    .attr('dy', '.35em');
 
-				  var rank = (data.value !== 0) ? ' (#' + data.rank +')' : ''; // rank of the municipality, if value = 0 don't show rank
+				  var rank = (data.value !== 0 && data.value !== null) ? ' (#' + data.rank +')' : ''; // rank of the municipality, if value = 0 don't show rank
 					t.append('tspan').text(data.name + rank)
 						.attr('class', 'tooltip-header')
 						.attr('x', 3)
 						.attr('dy', 3);
 
 					// 
-					if (data.value === 0) {
+					if (data.value === 0 || data.value === null) {
 						var value = 'Niet bekend'
 					} else {
-						var value = '€ ' + Convert.formatNumber(data.value) + ' per inwoner'
+						if (scope.type === 'absolute') {
+							var value = '€ ' + Convert.formatNumber(data.value) + ' per inwoner'
+						} else {
+							var value = (data.value > 0) ? '+' + data.value + ' %' : data.value + ' %';
+						};
+						
 					};
 
 					t.append('tspan').text(value)
@@ -146,6 +260,10 @@ angular.module('gemeenteFinancienApp')
 					// add group for tooltip
 					tooltip =  svg.append('g')
 						.attr('id', 'tooltip');
+
+					// add group for legend
+					legend =  svg.append('g')
+						.attr('id', 'legend');
 
 					// draw map
 					d3.json('../../data/gemeentes_topojson.json', function(error, nl) {
@@ -212,6 +330,7 @@ angular.module('gemeenteFinancienApp')
 
 					  // set map coloring
 					  updateMap();
+					  drawLegend();
 
 					});
 
@@ -269,7 +388,7 @@ angular.module('gemeenteFinancienApp')
 				      	};
 
 				      	// add none class to municipalities with no data
-				      	if (mData.value === 0) {
+				      	if (mData.value === 0 || mData.value === null) {
 				      		c+= ' none';
 				      	};
 
@@ -323,6 +442,7 @@ console.log('sub6: ' + svg.select('#map').selectAll('.sub6')[0].length);
 				var w = angular.element($window); // window object
 				var svg = null; // handle to svg element
 				var tooltip = null; // tooltip group
+				var legend = null; // legend group
 				var width = 0; // width of the chart
 				var height = 0; // height of the chart
 				var projection; // map projection
@@ -343,6 +463,7 @@ console.log('sub6: ' + svg.select('#map').selectAll('.sub6')[0].length);
 					color = scope.getColorScale(); // get color scale
 					//scope.originalDataset = scope.data; // 
 					updateMap();
+					drawLegend();
 				});
 
 				
@@ -382,7 +503,7 @@ console.log('sub6: ' + svg.select('#map').selectAll('.sub6')[0].length);
 
 
 					drawMap();
-
+					
 
 					/*
 					==============================================================

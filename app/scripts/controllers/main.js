@@ -39,35 +39,63 @@ angular.module('gemeenteFinancienApp')
 
 	//
 	$scope.getMapColorScale = function() {
+		
 		// set color scale
-		var color = d3.scale.linear()
-		  .domain([mapDataMin, mapDataMax])
-		  //.range(['#edf8fb', '#006d2c']);
-		  .range(['#6cbeff', '#002039']);
+		if ($scope.mapDataType === 'absolute') {
+			// absolute scale
+			var color = d3.scale.linear()
+			  .domain([mapDataMin, mapDataMax])
+			  //.range(['#edf8fb', '#006d2c']);
+			  .range(['#6cbeff', '#002039']);
+		} else {
+			// relative scale
+			var color = d3.scale.linear()
+			  .domain([mapDataMin, 0, mapDataMax])
+			  //.range(['#f11111', '#d3d3d3', '#8AC007']);
+			  .range(['#ffd600', '#d3d3d3', '#002039']);
+		}
+
 
 		return color;
 	}
 
 
-	// returns an array with data formatted for the map [{id, name, value2013}]
+	// returns an array with data formatted for the map [{id, name, value2013}] or [{id, name, changeInPercentage}]
 	var getMapData = function() {
 		var returnArray = [];
 
-//console.log($scope.selectedDataset.substring(0, 1));
+		if ($scope.mapDataType === 'absolute') {
+			// set map data absolute
+			for (var i = 0; i < $scope.municipalitiesDataset.length; i++) { // loop through municipalities
+				var value = null;
+				for (var j = 0; j < $scope.municipalitiesDataset[i].data.length; j++) { // loop through municipalities data
+					if ($scope.municipalitiesDataset[i].data[j].name === $scope.selectedDataset) { // if dataset is found
+						value = ($scope.municipalitiesDataset[i].data[j].value2013 !== null) ? $scope.municipalitiesDataset[i].data[j].value2013 : 0; // set value 0 if value is null
+						returnArray.push({'id': $scope.municipalitiesDataset[i].id, 'name': $scope.municipalitiesDataset[i].name, 'coalition': $scope.municipalitiesDataset[i].coalition, 'value': value, 'selected': isSelected($scope.municipalitiesDataset[i].id)});
+					};
 
-		for (var i = 0; i < $scope.municipalitiesDataset.length; i++) { // loop through municipalities
-			var value = null;
-			for (var j = 0; j < $scope.municipalitiesDataset[i].data.length; j++) { // loop through municipalities data
-				if ($scope.municipalitiesDataset[i].data[j].name === $scope.selectedDataset) { // if dataset is found
-					value = ($scope.municipalitiesDataset[i].data[j].value2013 !== null) ? $scope.municipalitiesDataset[i].data[j].value2013 : 0; // set value 0 if value is null
-					returnArray.push({'id': $scope.municipalitiesDataset[i].id, 'name': $scope.municipalitiesDataset[i].name, 'coalition': $scope.municipalitiesDataset[i].coalition, 'value': value, 'selected': isSelected($scope.municipalitiesDataset[i].id)});
-				};
-
-				if (j === $scope.municipalitiesDataset[i].data.length-1 && value === null) { // loop is at last item and need data is not found, add an 0 record
-					returnArray.push({'id': $scope.municipalitiesDataset[i].id, 'name': $scope.municipalitiesDataset[i].name, 'coalition': $scope.municipalitiesDataset[i].coalition, 'value': 0, 'selected': isSelected($scope.municipalitiesDataset[i].id)});
+					if (j === $scope.municipalitiesDataset[i].data.length-1 && value === null) { // loop is at last item and need data is not found, add an 0 record
+						returnArray.push({'id': $scope.municipalitiesDataset[i].id, 'name': $scope.municipalitiesDataset[i].name, 'coalition': $scope.municipalitiesDataset[i].coalition, 'value': 0, 'selected': isSelected($scope.municipalitiesDataset[i].id)});
+					};
 				};
 			};
-		};
+		} else {
+			// set map data relative
+			for (var i = 0; i < $scope.municipalitiesDataset.length; i++) { // loop through municipalities
+				var value = null;
+				for (var j = 0; j < $scope.municipalitiesDataset[i].data.length; j++) { // loop through municipalities data
+					if ($scope.municipalitiesDataset[i].data[j].name === $scope.selectedDataset.substring(1, $scope.selectedDataset.length)) { // if dataset is found
+						if ($scope.municipalitiesDataset[i].data[j].value2013 !== null && $scope.municipalitiesDataset[i].data[j].value2013 !== 0 && $scope.municipalitiesDataset[i].data[j].value2010 !== null && $scope.municipalitiesDataset[i].data[j].value2010 !== 0) { // if values in 2010 and 2013 are not 0 or null calucalte percentage
+							value = Math.round($scope.municipalitiesDataset[i].data[j].value2013/($scope.municipalitiesDataset[i].data[j].value2010/100)) - 100; // calculate change in percentage
+						};
+						returnArray.push({'id': $scope.municipalitiesDataset[i].id, 'name': $scope.municipalitiesDataset[i].name, 'coalition': $scope.municipalitiesDataset[i].coalition, 'value': value, 'selected': isSelected($scope.municipalitiesDataset[i].id)});
+					};
+					if (j === $scope.municipalitiesDataset[i].data.length-1 && value === null) { // loop is at last item and need data is not found, add an 0 record
+						returnArray.push({'id': $scope.municipalitiesDataset[i].id, 'name': $scope.municipalitiesDataset[i].name, 'coalition': $scope.municipalitiesDataset[i].coalition, 'value': null, 'selected': isSelected($scope.municipalitiesDataset[i].id)});
+					};
+				};
+			};
+		}
 
 		// sort data on value
 		returnArray.sort(function(a, b){
@@ -216,6 +244,7 @@ angular.module('gemeenteFinancienApp')
 	$scope.filters = []; // active party filters
 	$scope.municipalitiesDataset = []; // contains the main dataset
 	$scope.mapData = []; // contains the data for the map
+	$scope.mapDataType = 'absolute'; // absolute | relative
 
 	//$scope.dataMunicipalitiesDetails = [];
 	/*
@@ -352,6 +381,13 @@ angular.module('gemeenteFinancienApp')
 
 	// 
 	$scope.$watch('selectedDataset', function(newValue, oldValue) {
+
+		if ($scope.selectedDataset.substring(0, 1) !== '_') {
+			$scope.mapDataType = 'absolute';
+		} else {
+			$scope.mapDataType = 'relative';
+		}
+
 		//console.log($scope.selectedDataset);	
 		$scope.mapData = getMapData(); // set map data
 		//$scope.legend = getLegend(newValue);

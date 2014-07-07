@@ -11,6 +11,7 @@ angular.module('gemeenteFinancienApp')
         selectedMunicipalities: '=selected',
         filters: '=filters',
         //legend: '=legend'
+        type: '@type',
         getColorScale: '&colorScale'
       },
       link: function postLink(scope, element, attrs) {

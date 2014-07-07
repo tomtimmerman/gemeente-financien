@@ -4,7 +4,12 @@
 <!-- HEADER -->
 <div class="row header">
   <div class="col-md-12">
-    <img src="http://static1.volkskrant.nl/images/logos/vk_logo.gif?1" alt="Volkskrant.nl" title="Volkskrant.nl" width="396" height="48">
+    <div class="pull-left">
+      <img src="http://static1.volkskrant.nl/images/logos/vk_logo.gif?1" alt="Volkskrant.nl" title="Volkskrant.nl" width="396" height="48">
+    </div>
+    <div class="pull-right">
+      <h1>Gemeente Financiën</h1>
+    </div>
   </div>
 </div>
 
@@ -30,7 +35,7 @@
       <option value="huisvesting">Ruimtelijke ordening en Volkshuisvesting (uitgaven per inwoner in 2013)</option>
       <option value="overig">Overig (uitgaven per inwoner in 2013)</option>
       <option value="belasting">Belasting (per inwoner in 2013)</option>
-      <!--
+      
       <option value="_totaal">Totale uitgaven (2010 t.o.v. 2013)</option>
       <option value="_bestuur">Algemeen Bestuur (uitgaven 2010 t.o.v. 2013)</option>
       <option value="_veiligheid">Openbare orde en Veiligheid (uitgaven 2010 t.o.v. 2013)</option>
@@ -42,7 +47,7 @@
       <option value="_gezondheid">Volksgezondheid en Milieu (uitgaven 2010 t.o.v. 2013)</option>
       <option value="_huisvesting">Ruimtelijke ordening en Volkshuisvesting (uitgaven 2010 t.o.v. 2013)</option>
       <option value="_overig">Overig (uitgaven 2010 t.o.v. 2013)</option>
-      -->
+      <option value="_belasting">Belasting (2010 t.o.v. 2013)</option>
     </select>
   </div>
 
@@ -75,12 +80,12 @@
       <div class="panel-body">
         <!-- map -->
         <div class="col-sm-7 map">
-          <map data="mapData" selected="selectedMunicipalities" filters="filters" color-scale="getMapColorScale()"></map>
+          <map data="mapData" selected="selectedMunicipalities" filters="filters" color-scale="getMapColorScale()" type="{{mapDataType}}"></map>
         </div>
 
         <!-- list -->
         <div class="col-sm-5 list">
-          <list data="mapData" selected="selectedMunicipalities" filters="filters" color-scale="getMapColorScale()"></list>
+          <list data="mapData" selected="selectedMunicipalities" filters="filters" color-scale="getMapColorScale()" type="{{mapDataType}}"></list>
         </div>
       </div>
     </div>
@@ -107,11 +112,12 @@
 
 <!-- FOOTER -->
 <div class="row">
-  <div class="col-md-12" style="margin: 10px 15px 30px 15px;">
+  <div class="col-md-12 footer" style="margin: 10px 15px 10px 15px;">
     <div class="panel panel-default">
       <div class="panel-body">
+        <h5>Bron data</h5>
         <p>
-          bronvermedling
+          <a href="http://www.cbs.nl/">CBS</a>, <a href="http://www.volkskrant.nl/">de Volkskrant</a>
         </p>
       </div>
     </div>
@@ -120,6 +126,10 @@
 
 
 
+<div class="row">
+  <div class="col-md-12" style="margin: 0px 30px 30px 30px;">
+    <p style="color: #ffffff;">Deze visualisatie is gemaakt door: <a href="http://tomtimmerman.nl/">Tom Timmerman</a></p>
+  </div>
 
 
 

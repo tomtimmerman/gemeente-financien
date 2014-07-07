@@ -18,7 +18,9 @@ $color-sub5: #2ca25f;
 $color-sub6: #006d2c;
 */
 
+/*$color-selected: #f11111;*/
 $color-selected: #f11111;
+
 
 
 @import 'municipalityDetails.scss';
@@ -38,11 +40,44 @@ body {
 .header {
   margin-top: 20px;
   margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    padding: 8px 0 0 0;
+    color: #fff;
+  }
 }
 
+@media all and (max-width: 1000px) {
+  h1 {
+    font-size: 20px;
+    padding: 28px 0 0 0 !important;
+  }
+}
+
+@media all and (max-width: 650px) {
+  h1 {
+    display: none;
+  }
+}
+
+
+
 .footer {
+  div {
+    margin: 0 30px 0 0;
+    padding: 0;
+  }
+
   p {
     margin: 0;
+    padding: 0 0 15px 15px;
+  }
+
+  h5 {
+    margin: 0;
+    padding: 15px 0 5px 15px;
+    color: #000000;
   }
 }
 

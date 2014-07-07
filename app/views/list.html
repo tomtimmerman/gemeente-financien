@@ -8,12 +8,15 @@
     <span class="party" ng-repeat="party in filters">{{convert.partyName(party)}}</span> 
       
     
-    <span class="badge pull-right" style="background-color:{{getColor(filteredAverage)}};">€ {{convert.formatNumber(filteredAverage)}}</span>
+    <span ng-if="type === 'absolute'" class="badge pull-right" style="background-color:{{getColor(filteredAverage)}};">€ {{convert.formatNumber(filteredAverage)}}</span>
+    <span ng-if="type === 'relative'" class="badge pull-right" style="background-color:{{getColor(filteredAverage)}};">{{filteredAverage}} %</span>
   </span>&nbsp;
 </p>
 
 <p>
-  Nationaal gemiddelde <span class="badge pull-right" style="background-color:{{getColor(average)}};">€ {{convert.formatNumber(average)}}</span>
+  Nationaal gemiddelde 
+    <span ng-if="type === 'absolute'" class="badge pull-right" style="background-color:{{getColor(average)}};">€ {{convert.formatNumber(average)}}</span>
+    <span ng-if="type === 'relative'" class="badge pull-right" style="background-color:{{getColor(average)}};">{{average}} %</span>
 </p>
 
 <hr/>
@@ -39,12 +42,18 @@
       <td class="indicator" ng-class="{selected: municipality.selected==true}"></td>
       <td>{{municipality.rank}}</td>
       <td>
-        {{municipality.name}}
-        <span class="party" ng-repeat="party in municipality.coalition">{{convert.partyName(party)}}</span>
-        <span class="party" ng-if="municipality.coalition.length === 0">Coalitie niet bekend</span>
+
+        <div>
+          {{municipality.name}}
+        </div>
+        <div>
+          <span class="party pull-left" ng-repeat="party in municipality.coalition">{{convert.partyName(party)}}</span>
+          <span class="party pull-left" ng-if="municipality.coalition.length === 0">Coalitie niet bekend</span>
+        </div>
       </td>
       <td align="right">
-        <span class="badge pull-right" style="background-color:{{getColor(municipality.value)}};">€ {{convert.formatNumber(municipality.value)}}</span>
+        <span ng-if="type === 'absolute'" class="badge pull-right" style="background-color:{{getColor(municipality.value)}};">€ {{convert.formatNumber(municipality.value)}}</span>
+        <span ng-if="type === 'relative'" class="badge pull-right" style="background-color:{{getColor(municipality.value)}};">{{municipality.value}} %</span>
       </td>
     </tr>
   </table>
