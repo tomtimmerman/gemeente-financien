@@ -67,7 +67,7 @@ angular.module('gemeenteFinancienApp')
 					tooltip.append('rect')
 						.attr('class', 'tooltip-bg')
 						.attr('width', segmentWidth)
-						.attr('height', 50)
+						.attr('height', 33)
 
 					var t = tooltip.append('text')
 						.attr('class', 'tooltip-text')
@@ -83,7 +83,7 @@ angular.module('gemeenteFinancienApp')
 						.attr('dy', 3);
 
 					var percentage = Math.round(data.data[column]/(totalValues[column]/100)); // calculate percentage of max value
-					t.append('tspan').text('€ ' + data.data[column] + ' per inwoner (' + percentage + '%)')
+					t.append('tspan').text('€ ' + Convert.formatNumber(data.data[column]) + ' per inwoner (' + percentage + '%)')
 						.attr('x', 3)
 						.attr('dy', 15);
 
@@ -292,7 +292,8 @@ angular.module('gemeenteFinancienApp')
 
 					// 
 					width = newValue;
-					height = width * 1.2;
+					//height = width * 1.2;
+					height = width * 1;
 					segmentWidth = (width - margin.left - margin.right) / (scope.dataset.data[0].data.length + ((scope.dataset.data[0].data.length-1)*0.5));
 
 					// initialize chart if it isn't initialized yet

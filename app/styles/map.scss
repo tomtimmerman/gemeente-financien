@@ -8,6 +8,8 @@
 
   #map path {
     stroke: none;
+    /*fill: #a1a1a1;*/
+    cursor: pointer;
   }
 
   #map path:hover {
@@ -16,11 +18,16 @@
     stroke-width: 0.3;
   }
 
+  #map .none {
+    cursor: default;
+  }
+
   .selected {
     stroke: $color-selected !important;
     stroke-width: 1 !important;
   }
 
+/*
   .hide-municipality {
     fill-opacity: 0.1;
   }
@@ -52,6 +59,23 @@
   .sub6 {
     fill: $color-sub6;
   }
+*/
+
+
+
+  .tooltip-header {
+    font-size: 1.5em;
+    fill: #000;
+    stroke: none;
+  }
+
+  .tooltip-text {
+    font-size: 1.1em;
+    fill: #000;
+    stroke: none;
+  }
+
+  
 
 
 

@@ -6,7 +6,7 @@
 	<ul>
 		<li class="pull-left">Coalitie:</li>
 		<li class="pull-left" ng-repeat="party in dataset.coalition">{{convert.partyName(party)}}</li>
-		<li class="text-warning" ng-if="dataset.coalition.length === 0">Niet bekend</li>
+		<li class="pull-left text-warning" ng-if="dataset.coalition.length === 0">Niet bekend</li>
 		<li class="clearfix"></li>
 	</ul>
 

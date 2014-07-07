@@ -1,38 +1,35 @@
 
 
 
-<!-- CONTROLS -->
-<div class="row controls">
-
-  <!-- coalition filter -->
-  <div class="col-xs-12">
-    <div class="btn-group">
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('sp')!== -1}" value="sp" ng-click="setFilter('sp')">SP</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('gl')!== -1}" value="gl" ng-click="setFilter('gl')">GroenLinks</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('pvda')!== -1}" value="pvda" ng-click="setFilter('pvda')">PvdA</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('d66')!== -1}" value="d66" ng-click="setFilter('d66')">D66</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('lokaal')!== -1}" value="lokaal" ng-click="setFilter('lokaal')">Lokale partijen</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('cu')!== -1}" value="cu" ng-click="setFilter('cu')">ChristenUnie</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('cda')!== -1}" value="cda" ng-click="setFilter('cda')">CDA</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('ton')!== -1}" value="ton" ng-click="setFilter('ton')">TON</button>
-      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('vvd')!== -1}" value="vvd" ng-click="setFilter('vvd')">VVD</button>
-    </div>    
+<!-- HEADER -->
+<div class="row header">
+  <div class="col-md-12">
+    <img src="http://static1.volkskrant.nl/images/logos/vk_logo.gif?1" alt="Volkskrant.nl" title="Volkskrant.nl" width="396" height="48">
   </div>
+</div>
+
+
+
+<!-- CONTROLS -->
+<div class="row controls panel-wrapper">
+
 
   <!-- dataset select -->
-  <div class="col-xs-12">
+  <div class="col-sm-5">
+    <h5>Selecteer een post</h5>
     <select ng-model="selectedDataset" class="form-control">
-      <option value="totaal">Totale uitgaven (2013)</option>
-      <option value="bestuur">Algemeen Bestuur (uitgaven 2013)</option>
-      <option value="veiligheid">Openbare orde en Veiligheid (uitgaven 2013)</option>
-      <option value="verkeer">Verkeer, Vervoer en Waterstaat (uitgaven 2013)</option>
-      <option value="economisch">Economische zaken (uitgaven 2013)</option>
-      <option value="onderwijs">Onderwijs (uitgaven 2013)</option>
-      <option value="cultuur">Cultuur en Recreatie (uitgaven 2013)</option>
-      <option value="sociaal">Sociale zekerheid (uitgaven 2013)</option>
-      <option value="gezondheid">Volksgezondheid en Milieu (uitgaven 2013)</option>
-      <option value="huisvesting">Ruimtelijke ordening en Volkshuisvesting (uitgaven 2013)</option>
-      <option value="overig">Overig (uitgaven 2013)</option>
+      <option value="totaal">Totale uitgaven (per inwoner in 2013)</option>
+      <option value="bestuur">Algemeen Bestuur (uitgaven per inwoner in 2013)</option>
+      <option value="veiligheid">Openbare orde en Veiligheid (uitgaven per inwoner in 2013)</option>
+      <option value="verkeer">Verkeer, Vervoer en Waterstaat (uitgaven per inwoner in 2013)</option>
+      <option value="economisch">Economische zaken (uitgaven per inwoner in 2013)</option>
+      <option value="onderwijs">Onderwijs (uitgaven per inwoner in 2013)</option>
+      <option value="cultuur">Cultuur en Recreatie (uitgaven per inwoner in 2013)</option>
+      <option value="sociaal">Sociale zekerheid (uitgaven per inwoner in 2013)</option>
+      <option value="gezondheid">Volksgezondheid en Milieu (uitgaven per inwoner in 2013)</option>
+      <option value="huisvesting">Ruimtelijke ordening en Volkshuisvesting (uitgaven per inwoner in 2013)</option>
+      <option value="overig">Overig (uitgaven per inwoner in 2013)</option>
+      <option value="belasting">Belasting (per inwoner in 2013)</option>
       <!--
       <option value="_totaal">Totale uitgaven (2010 t.o.v. 2013)</option>
       <option value="_bestuur">Algemeen Bestuur (uitgaven 2010 t.o.v. 2013)</option>
@@ -50,21 +47,19 @@
   </div>
 
 
-  <!-- legend -->
-  <div class="col-xs-12">
-    <ul class="legend">
-      
-      <li class="pull-left" ng-repeat="item in legend.categories">
-        <span class="color {{item.class}}"></span>
-        <span class="caption">{{formatLegendCaption(item.min, item.max)}}</span>
-      </li>
-      <li class="pull-left">
-        <span class="color none"></span>
-        <span class="caption">Niet bekend</span>
-      </li>
-
-      <li class="clearfix"></li>
-    </ul>
+  <!-- coalition filter -->
+  <div class="col-sm-7" style="margin-bottom: 10px;">
+    <h5>Filter op coalitie partijen</h5>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('sp')!== -1}" value="sp" ng-click="setFilter('sp')">SP</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('gl')!== -1}" value="gl" ng-click="setFilter('gl')">GroenLinks</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('pvda')!== -1}" value="pvda" ng-click="setFilter('pvda')">PvdA</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('d66')!== -1}" value="d66" ng-click="setFilter('d66')">D66</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('lokaal')!== -1}" value="lokaal" ng-click="setFilter('lokaal')">Lokale partijen</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('cu')!== -1}" value="cu" ng-click="setFilter('cu')">ChristenUnie</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('cda')!== -1}" value="cda" ng-click="setFilter('cda')">CDA</button>
+      <button type="button" class="btn btn-default" ng-class="{active: filters.indexOf('vvd')!== -1}" value="vvd" ng-click="setFilter('vvd')">VVD</button>
+    </div>    
   </div>
 
 
@@ -74,28 +69,60 @@
 
 <!-- NATIONAL -->
 <div class="row">
+  <div class="national-data-container panel-wrapper">
+    <h5>Klik op een gemeente om de financiele details te bekijken</h5>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <!-- map -->
+        <div class="col-sm-7 map">
+          <map data="mapData" selected="selectedMunicipalities" filters="filters" color-scale="getMapColorScale()"></map>
+        </div>
 
-  <!-- map -->
-  <div class="col-sm-8 map">
-    <map data="mapData" selected="selectedMunicipalities" filters="filters" legend="legend"></map>
+        <!-- list -->
+        <div class="col-sm-5 list">
+          <list data="mapData" selected="selectedMunicipalities" filters="filters" color-scale="getMapColorScale()"></list>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <!-- list -->
-  <div class="col-sm-4 list">
-    <list data="mapData" selected="selectedMunicipalities" filters="filters" legend="legend"></list>
-  </div>
-
 </div>
 
 
 
 <!-- MUNICIPALITY DETAILS -->
 <div class="row">
-
   <div class="col-md-6 details" ng-repeat="municipality in selectedMunicipalities">
-    <municipality-details data="getMunicipalityDetailsData(municipality)" municipalityId="municipality"></municipality-details>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <municipality-details data="getMunicipalityDetailsData(municipality)" municipalityId="municipality"></municipality-details>
+      </div>
+    </div>
   </div>
   
+
+
+
+
+
+
+<!-- FOOTER -->
+<div class="row">
+  <div class="col-md-12" style="margin: 10px 15px 30px 15px;">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p>
+          bronvermedling
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
 
 
 </div>

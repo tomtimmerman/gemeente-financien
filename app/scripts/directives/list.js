@@ -10,7 +10,8 @@ angular.module('gemeenteFinancienApp')
         data: '=data',
         selectedMunicipalities: '=selected',
         filters: '=filters',
-        legend: '=legend'
+        //legend: '=legend'
+        getColorScale: '&colorScale'
       },
       link: function postLink(scope, element, attrs) {
       	
@@ -26,7 +27,21 @@ angular.module('gemeenteFinancienApp')
 
 				// 
 				var filterDataset = function() {
+//console.log(scope.color(1500));
+//console.log(scope.color(0));
+//console.log();
+
+
 					scope.dataset = scope.originalDataset; // reset dataset
+
+					// filter out 0 values
+					scope.dataset = filterFilter(scope.dataset, function(item) { 
+						var returnValue = true;
+						if (item.value === 0 || item.value === null) {returnValue = false;};
+						return returnValue;
+					});
+
+					// 
 					if(scope.filters.length > 0) {
 			    	scope.dataset = filterFilter(scope.dataset, function(value) {
 			    		var returnValue = true;
@@ -44,13 +59,16 @@ angular.module('gemeenteFinancienApp')
 				// 
 				var getAverage = function() {
 					var total = 0;
+					var count = 0;
 					for (var i = 0; i < scope.dataset.length; i++) {
 						total += scope.dataset[i].value;
+						if (scope.dataset[i].value !== 0) {count++}; // only count values that are above 0
 					};
-					return Math.round(total/(i+1));
+					return Math.round(total/count);
 				}
 
 
+				/*
 				// returns the class for the municipality path
 				scope.getClass = function(value) {
 //console.log(scope.legend);
@@ -68,6 +86,7 @@ angular.module('gemeenteFinancienApp')
 					};
 					return returnClass;
 				}
+				*/
 
 
 				//
@@ -77,6 +96,12 @@ angular.module('gemeenteFinancienApp')
 					} else {
 						scope.selectedMunicipalities.splice(scope.selectedMunicipalities.indexOf(id), 1); // remove selectedMunicipalities from filters array
 					};
+				}
+
+
+				// returns the color of the badge
+				scope.getColor = function(value) {
+					 return (value !== null && value !== 0) ? color(value) : '#f1f1f1';
 				}
 
 
@@ -93,7 +118,7 @@ angular.module('gemeenteFinancienApp')
 				scope.average = 0; //  total of the values of the entire dataset
 				scope.filteredAverage = 0; // total of the values of the filtered dataset
 				scope.convert = Convert; // expose convert service to scope
-
+				var color; // color scale
 
 
 
@@ -109,21 +134,14 @@ angular.module('gemeenteFinancienApp')
 					scope.dataset = scope.data; // 
 					scope.originalDataset = scope.data; // 
 
-					// sort dataset on value
-					scope.dataset.sort(function(a, b){
-						return b.value-a.value;
-					})
-
-					// add a rank to dataset entries
-					for (var i = 0; i < scope.dataset.length; i++) {
-						scope.dataset[i].rank = i+1;
-					};
-
 					scope.average = getAverage();
 
 					filterDataset();
 
 					scope.filteredAverage = getAverage();
+
+					color = scope.getColorScale(); // set color scale
+
 				});
 
 
@@ -139,11 +157,8 @@ angular.module('gemeenteFinancienApp')
 
 				// 
 				scope.$watchCollection('filters', function() {
-
 					filterDataset();
-
 					scope.filteredAverage = getAverage();
-
 				});
 
       }

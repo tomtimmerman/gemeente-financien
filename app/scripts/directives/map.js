@@ -10,7 +10,8 @@ angular.module('gemeenteFinancienApp')
         data: '=data',
         selectedMunicipalities: '=selected',
         filters: '=filters',
-        legend: '=legend'
+        //legend: '=legend'
+        getColorScale: '&colorScale'
       },
       link: function postLink(scope, element, attrs) {
 
@@ -57,6 +58,8 @@ angular.module('gemeenteFinancienApp')
 				}
 
 
+
+				/*
 				// returns the class for the municipality path
 				var getClass = function(value) {
 //console.log(scope.legend);
@@ -74,6 +77,61 @@ angular.module('gemeenteFinancienApp')
 					};
 					return returnClass;
 				}
+				*/
+
+
+				//
+				var drawTooltip = function(bbox, data) {
+					var tt = tooltip.append('g')
+						.attr('class', '.map-tooltip')
+			      .attr('transform', function() { 
+			      	//var x = bbox.left,
+			      	//		y = bbox.top;
+			      	var x = 20,
+			      			y = 20;
+			        //return 'translate(' + x + ',' + y + ')'; 
+			        return 'translate(' + x + ',' + y + ')'; 
+			      });
+
+					var t = tt.append('text')
+				    .attr('x', 5)
+				    .attr('y', 9)
+				    .attr('dy', '.35em');
+
+				  var rank = (data.value !== 0) ? ' (#' + data.rank +')' : ''; // rank of the municipality, if value = 0 don't show rank
+					t.append('tspan').text(data.name + rank)
+						.attr('class', 'tooltip-header')
+						.attr('x', 3)
+						.attr('dy', 3);
+
+					// 
+					if (data.value === 0) {
+						var value = 'Niet bekend'
+					} else {
+						var value = '€ ' + Convert.formatNumber(data.value) + ' per inwoner'
+					};
+
+					t.append('tspan').text(value)
+					.attr('class', 'tooltip-text')
+						.attr('x', 3)
+						.attr('dy', 15);
+
+					//
+					var coalition = '' 
+					if (data.coalition.length > 0) {
+						//coalition = 'Niet bekend'
+						for (var i = 0; i < data.coalition.length; i++) {
+							if (i !== 0) {coalition += ' | '}; // 
+							coalition += Convert.partyName(data.coalition[i]) + '';
+						};
+					};
+
+					t.append('tspan').text(coalition)
+					.attr('class', 'tooltip-text')
+						.attr('x', 3)
+						.attr('dy', 15);
+
+				}
 
 
 				// 
@@ -81,41 +139,13 @@ angular.module('gemeenteFinancienApp')
 					// clear map
 					svg.selectAll('g').remove(); // remove all groups, empty svg element
 
-
-
-					// init map projection and path generator
-					//projection = d3.geo.mercator()
-					    //.rotate([0,0])
-					    //.center([7,52.5])
-					    //.scale(6750);
-					    //.scale(width)
-					    //.translate([0, 0]);
-					    //.translate([width / 2, height / 2]);
-					    //.scale(height*10);
-					    //
-					    //.center([5.378247, 52.013965]);
-					    //.center([6.5,52.5]);
-					    //.translate([width / 2, height / 2]);
-					    //.translate([-300, 800]);
-
-					/*
-					// define zoom behavior
-					var zoom = d3.behavior.zoom()
-						.scaleExtent([1, 8])
-						.on("zoom", move);
-					*/
-
-					// 
-					//path = d3.geo.path()
-					    //.projection(projection);
-
-
-					// bind zoom funcitonality to svg element
-					//svg.call(zoom);
-
 					// add group that contains all the municipality paths
 					var map = svg.append('g')
 						.attr('id', 'map');
+
+					// add group for tooltip
+					tooltip =  svg.append('g')
+						.attr('id', 'tooltip');
 
 					// draw map
 					d3.json('../../data/gemeentes_topojson.json', function(error, nl) {
@@ -134,38 +164,54 @@ angular.module('gemeenteFinancienApp')
 						path = d3.geo.path()
 						    .projection(projection);
 
-
+						// draw municipality path's
 					  map.selectAll('path')
 					    //.data(topojson.object(nl, nl.objects.gemeentes_geojson).geometries)
 					    .data(topojson.feature(nl, nl.objects.gemeentes_geojson).features)
 					    .enter()
 					      .append('path')
 					      .attr('d', path)
+
 					      //.attr('class', 'municipality')
+					      /*
 					      .attr('class', function(d, i) {
-					      	var mData = getMunicipalityData(d.id);
-					      	var value = (mData.value) ? mData.value : null;
-					      	var c = getClass(value);
+					      	//var mData = getMunicipalityData(d.id);
+					      	//var value = (mData.value) ? mData.value : null;
+					      	//var c = getClass(value);
+									var c = '';
 
 					      	// add selected class to selected municipalities
 					      	if (scope.selectedMunicipalities.indexOf(d.id) !== -1) {
-					      		c+= ' selected';
+					      		c+= 'selected';
 					      	};
 //var mData = getMunicipalityData(d.id);
 //if (mData.name === 'Woudenberg') {console.log('Woudenberg:'+i)};
 					      	return c;
 					      })
+					      */
 					      .on('click', function(d) {
-					      	scope.setSelected(d.id);
-					      	scope.$apply();
+					      	var mData = getMunicipalityData(d.id);
+					      	if (mData.value !== 0) { // only select if value is not 0
+						      	scope.setSelected(d.id);
+						      	scope.$apply();
+					      	};
 								})
 					      .on('mouseover', function(d) {
 									var mData = getMunicipalityData(d.id);
-									//console.log(mData);
+									var bbox = d3.select(this).node().getBoundingClientRect();
+									drawTooltip(bbox, mData);
+//console.log(bbox);
+//console.log(mData);
+//console.log(d3.transform(d3.select(this).attr("transform")).translate);
+//console.log(d3.select(this).getBBox());
+//console.log(d3.geo.bounds(d)[0]);
 								})
-					      .on('mouseout', function(d) {
-					        //svg.selectAll('.tooltip').remove(); // remove tooltip
+					      .on('mouseout', function() {
+					        svg.selectAll('#tooltip').selectAll('g').remove(); // remove tooltip
 					      });
+
+					  // set map coloring
+					  updateMap();
 
 					});
 
@@ -189,9 +235,14 @@ angular.module('gemeenteFinancienApp')
 				// update classes of the municipality paths.
 				var updateMap = function() {
 
+					
+
+
+					// 
 					if(svg !== null) { // check if svg is initialized
 						svg.select('#map').selectAll('path')
 							.attr('class', function(d) {
+								/*
 				      	var mData = getMunicipalityData(d.id);
 				      	var value = (mData.value) ? mData.value : null;
 				      	var c = getClass(value);
@@ -208,9 +259,44 @@ angular.module('gemeenteFinancienApp')
 										c = 'none';
 									};
 								};
+								*/
+								var c = '';
+								var mData = getMunicipalityData(d.id);
+
+				      	// add selected class to selected municipalities
+				      	if (scope.selectedMunicipalities.indexOf(d.id) !== -1) {
+				      		c+= 'selected';
+				      	};
+
+				      	// add none class to municipalities with no data
+				      	if (mData.value === 0) {
+				      		c+= ' none';
+				      	};
 
 				      	return c;
+	
 							})
+							
+							// set fill color for municipalities
+							.attr('fill', function(d) {
+				      	var mData = getMunicipalityData(d.id);
+				      	//var value = (mData.value) ? mData.value : null;
+				      	//var value = mData.value;
+				      	var c = (mData.value !== null && mData.value !== 0) ? color(mData.value) : '#f1f1f1'; // set color
+
+				      	// hide filtered municipalities
+								for (var i = 0; i < scope.filters.length; i++) {
+									if (mData.coalition && mData.coalition.indexOf(scope.filters[i]) === -1) {
+										//c = c + ' hide-municipality'
+										c = '#f1f1f1';
+									};
+								};
+
+				      	//return color(value);
+				      	return c;
+							})
+
+
 						}
 /*
 console.log('-----------');
@@ -236,10 +322,12 @@ console.log('sub6: ' + svg.select('#map').selectAll('.sub6')[0].length);
 				scope.dataset = {};
 				var w = angular.element($window); // window object
 				var svg = null; // handle to svg element
+				var tooltip = null; // tooltip group
 				var width = 0; // width of the chart
 				var height = 0; // height of the chart
 				var projection; // map projection
 				var path; // map path generator
+				var color; // color scale
 
 
 
@@ -252,6 +340,7 @@ console.log('sub6: ' + svg.select('#map').selectAll('.sub6')[0].length);
 				// 
 				scope.$watch('data', function() {
 					scope.dataset = scope.data; // 
+					color = scope.getColorScale(); // get color scale
 					//scope.originalDataset = scope.data; // 
 					updateMap();
 				});
@@ -269,10 +358,7 @@ console.log('sub6: ' + svg.select('#map').selectAll('.sub6')[0].length);
 				});
 
 
-				// 
-				scope.$watchCollection('legend', function() {
-//console.log(scope.legend);
-				});
+
 
 
 				// watch if the width of the element changes
@@ -295,12 +381,9 @@ console.log('sub6: ' + svg.select('#map').selectAll('.sub6')[0].length);
 					};
 
 
-
-
-
 					drawMap();
 
-					//updateMap();
+
 					/*
 					==============================================================
 					Kan ook kijken of ik de hele map kan scalen i.p.v opnieuw teken bij resize

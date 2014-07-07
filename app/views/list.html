@@ -2,30 +2,51 @@
 <input class="form-control" ng-model="search.$" placeholder="Zoek een gemeente">
 
 <p>
-  <span ng-if="filters.length > 0">Coalitie gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(filteredAverage)}}</span></span>&nbsp;
+  <span ng-if="filters.length > 0">Gemiddelde coalitie
+    
+      
+    <span class="party" ng-repeat="party in filters">{{convert.partyName(party)}}</span> 
+      
+    
+    <span class="badge pull-right" style="background-color:{{getColor(filteredAverage)}};">€ {{convert.formatNumber(filteredAverage)}}</span>
+  </span>&nbsp;
 </p>
 
 <p>
-  Nationaal gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(average)}}</span>
+  Nationaal gemiddelde <span class="badge pull-right" style="background-color:{{getColor(average)}};">€ {{convert.formatNumber(average)}}</span>
 </p>
 
-<ul class="">
+<hr/>
 
 <!--
-  <li class="header"><span ng-if="filters.length > 0">Coalitie gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(filteredAverage)}}</span></span>&nbsp;</li>
-  <li class="header">Nationaal gemiddelde <span class="badge pull-right">€ {{convert.formatNumber(average)}}</span></li>
--->
-  
-
+<ul class="">
   <li class="" ng-repeat="municipality in dataset | filter:search" ng-class="{selected: municipality.selected==true}" ng-click="setSelected(municipality.id)">
     <span class="pull-left rank">{{municipality.rank}}</span>
     <span class="pull-left">{{municipality.name}}<br/>
       <span class="party" ng-repeat="party in municipality.coalition">{{convert.partyName(party)}}</span>
       <span class="party" ng-if="municipality.coalition.length === 0">Coalitie niet bekend</span>
     </span>
-    <span class="badge pull-right {{getClass(municipality.value)}}">€ {{convert.formatNumber(municipality.value)}}</span>
+    <span class="badge pull-right" style="background-color:{{getColor(municipality.value)}};">€ {{convert.formatNumber(municipality.value)}}</span>
     <span class="clearfix"></span>
   </li>
-
   <li class="text-warning" ng-if="dataset.length === 0">Geen gemeenten die aan deze voorwaarden voldoen!</li>
 </ul>
+-->
+
+<div>
+  <table>
+    <tr ng-repeat="municipality in dataset | filter:search" ng-click="setSelected(municipality.id)">
+      <td class="indicator" ng-class="{selected: municipality.selected==true}"></td>
+      <td>{{municipality.rank}}</td>
+      <td>
+        {{municipality.name}}
+        <span class="party" ng-repeat="party in municipality.coalition">{{convert.partyName(party)}}</span>
+        <span class="party" ng-if="municipality.coalition.length === 0">Coalitie niet bekend</span>
+      </td>
+      <td align="right">
+        <span class="badge pull-right" style="background-color:{{getColor(municipality.value)}};">€ {{convert.formatNumber(municipality.value)}}</span>
+      </td>
+    </tr>
+  </table>
+</div>
+
