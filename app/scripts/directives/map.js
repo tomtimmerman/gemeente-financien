@@ -401,13 +401,13 @@ angular.module('gemeenteFinancienApp')
 				      	var mData = getMunicipalityData(d.id);
 				      	//var value = (mData.value) ? mData.value : null;
 				      	//var value = mData.value;
-				      	var c = (mData.value !== null && mData.value !== 0) ? color(mData.value) : '#f1f1f1'; // set color
+				      	var c = (mData.value !== null && mData.value !== 0) ? color(mData.value) : '#e1e1e1'; // set color
 
 				      	// hide filtered municipalities
 								for (var i = 0; i < scope.filters.length; i++) {
 									if (mData.coalition && mData.coalition.indexOf(scope.filters[i]) === -1) {
 										//c = c + ' hide-municipality'
-										c = '#f1f1f1';
+										c = '#e1e1e1';
 									};
 								};
 

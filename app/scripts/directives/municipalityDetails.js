@@ -113,7 +113,9 @@ angular.module('gemeenteFinancienApp')
 					  // sort time series by value
 					  var timeSeries = scope.dataset.data;
 					  timeSeries = timeSeries.sort(function(a,b) {
-					    return a['data'][i] < b['data'][i];
+					    //return a['data'][i] < b['data'][i];
+					    //return a.data[i] < b.data[i];
+					    return b.data[i]-a.data[i];
 					  });
 
 					  // add new column group

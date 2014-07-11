@@ -53,7 +53,8 @@
   }
 
   div {
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     max-height: 35em;
   }
 
@@ -63,11 +64,21 @@
 
   table {
     width: 100%;
+    overflow: hidden;
+  }
+
+  tr {
+    overflow: hidden;
   }
 
   td {
     cursor: pointer;
+    overflow: hidden;
     @include list-item-margins;
+
+    div {
+      overflow: hidden;
+    }
   }
 
   .rank {
